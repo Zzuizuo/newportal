@@ -63,11 +63,7 @@ export default {
         // this.loadData()
     },
     methods: {
-        // loadData(){
-        //     this.request('post', '/alpha/api/wechatscan/login',{}).then((res) => {
-        //         console.log(res)
-        //     })
-        // },
+
         handleOpen(key, keyPath) {
             console.log(key, keyPath);
         },

@@ -1,16 +1,22 @@
 <template>
     <div id="app">
-        <admin></admin>
-        <router-view></router-view>
+        <admin v-if="isShow"></admin>
+        <entrance v-else/>
     </div>
 </template>
 
 <script>
-import admin from '@/components/admin'
+import Admin from '@/components/admin'
+import Entrance from '@/components/entrance'
 export default {
     name: 'App',
     components: {
-        admin
+        Admin,Entrance
+    },
+    computed: {
+        isShow() {
+            return this.$store.state.showMenu.isShow
+        }
     },
     created(){
 

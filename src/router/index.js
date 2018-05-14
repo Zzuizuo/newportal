@@ -4,6 +4,7 @@ import Entrance from '@/components/entrance'
 import login from '@/page/login'
 import Board from '@/page/board'
 import Detail from '@/page/detail'
+import Accounts from '@/page/accounts'
 
 Vue.use(Router)
 
@@ -33,6 +34,10 @@ export default new Router({
                             component: Detail,
                         }
                     ]
+                },{
+                    path: 'accounts',
+                    name: 'accounts',
+                    component: Accounts,
                 },
           ]
       },

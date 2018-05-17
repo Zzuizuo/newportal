@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Admin from '@/components/admin'
+import Admin from '@/page/admin'
 import Entrance from '@/components/entrance'
 export default {
     name: 'App',

@@ -1,6 +1,6 @@
 const dev = {
-    host: 'http://dev.genwoshua.com',
-    wxAppid: 'wx5226f655adeda0ab',
+    host: 'http://rzlt.genwoshua.com',
+    wxAppid: 'wx86406abd3035f1ec',
 }
 
 const prod = {

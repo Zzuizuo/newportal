@@ -1,5 +1,13 @@
 export default {
     state:{
-        isShow: true
-    }
+        isShow: false
+    },
+    mutations: {
+        handleShowMenu (state) {
+            state.isShow = true
+        },
+        handleDisplayMenu (state){
+            state.isShow = false
+        }
+    },
 }

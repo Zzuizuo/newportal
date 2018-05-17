@@ -1,11 +1,14 @@
 <template>
     <div>
         <el-row class="tac">
-            <el-col :span="3" class="menu">
+            <el-col :span="4" class="menu">
                 <div class="admin">
                     <p>成都人在旅途智慧旅游</p>
-                    <img src="" alt="">
-                    <p>{{name}}</p>
+                    <img class="userimg" :src="userData.headimgurl" alt="">
+                    <div class="username">
+                        <span>{{userData.username}}</span>
+                        <i @click="handleLogout" class="iconfont icon-tuichu"></i>
+                    </div>
                 </div>
                 <el-menu
                     :default-active="menuActive"
@@ -57,7 +60,7 @@
                         </el-menu-item>
                 </el-menu>
             </el-col>
-            <el-col :span="21">
+            <el-col :span="20">
                 <Entrance/>
             </el-col>
         </el-row>
@@ -66,6 +69,8 @@
 
 <script>
 import Entrance from '@/components/entrance'
+import request from '@/assets/js/request'
+
 export default {
     name: 'HelloWorld',
     components: {
@@ -74,8 +79,8 @@ export default {
     data () {
         return {
             menuActive: null,
-
-            name: 'toothless'
+            userData: null,
+            name: 'toothless',
         }
     },
     computed:{
@@ -91,7 +96,13 @@ export default {
         }else{
             this.menuActive = this.$router.history.current.path
         }
-     
+
+        //login
+        if(sessionStorage.user){
+            this.userData = JSON.parse(sessionStorage.user)
+        }else{
+            this.$router.push({name: login})
+        }
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -103,6 +114,22 @@ export default {
         handleSelect(key, keyPath){
             this.menuActive = key
             sessionStorage.menuActive = key
+        },
+        handleLogout(){
+            request.get(this, '/logout').then((res) => {
+                if(res.code == 1){
+                    this.$store.commit('handleDisplayMenu')
+                    this.$router.push({
+                        name: 'login'
+                    })
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg.message ? res.msg.message : res.msg,
+                        showClose: true,
+                    })
+                }
+            })
         }
     }
 }
@@ -111,17 +138,28 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 .menu{
-    min-width: 200px;
+    // min-width: 200px;
     min-height: 100vh;
     background: #f0f0f2;
 }
 .admin{
     text-align: center;
     padding: 30px 0;
-    img{
+    .userimg{
         width: 76px;
         height: 76px;
         border-radius: 100%;
+        margin: 20px auto;
+    }
+    .username{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .icon-tuichu{
+            width: 20px;
+            margin-left: 20px;
+            color: #00c8fb;
+        }
     }
 }
 </style>

@@ -14,7 +14,7 @@ export default{
         }
     },
     created(){
-        
+        this.$store.commit('handleDisplayMenu')
     },
     mounted(){
         this.loadQRcode()
@@ -26,7 +26,8 @@ export default{
                 id: "scanlogin",
                 appid: config.wxAppid,
                 scope: "snsapi_login",
-                redirect_uri: encodeURIComponent(config.host+"/alpha/api/wechatscan/login"),
+                // redirect_uri: encodeURIComponent(config.host+"/wx/scan/login"),
+                redirect_uri: encodeURIComponent(config.host+"/#/login/transit"),
                 state: Math.ceil(Math.random() * 1000),
                 style: "black",
                 href: ""
@@ -37,7 +38,7 @@ export default{
 </script>
 
 <style>
-.login-form{
-    text-align: center;
+.login-form iframe{
+    margin: 80px auto;
 }
 </style>

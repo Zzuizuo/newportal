@@ -12,25 +12,41 @@ import request from '@/assets/js/request'
 export default{
     data(){
         return {
-            message: '登录中'
+            message: ''
         }
     },
     created(){
-        this.$store.commit('handleDisplayMenu')
         let query = getQueryString('code')
-        this.handleLogin(query)
+        let url = ''
+        this.$store.commit('handleDisplayMenu')
+        
+        if(this.$store.state.scan.isBind){
+            this.message = '绑定中'
+            url = '/admin/user/bind?userId='+ this.$store.state.scan.userId+'&'+query
+            this.handleScan(url)
+        }else{
+            this.message = '登录中'
+            url = '/wx/scan/login?' + query
+            this.handleScan(url)
+        }
     },
     mounted(){
 
     },
     methods: {
-        handleLogin(query){
-            request.get(this, '/wx/scan/login?' +query).then((res) => {
+        handleScan(url){
+            request.get(this, url).then((res) => {
                 if(res.code == 1){
                     this.$router.push({name: 'accounts'})
-                    sessionStorage.user = JSON.stringify(res.data)
+                    if(!this.$store.state.scan.isBind){
+                        sessionStorage.user = JSON.stringify(res.data)
+                    }
                 }else{
-                    this.message = '登录失败,请联系管理员'
+                    if(this.$store.state.scan.isBind){
+                        this.message = '绑定失败,请联系管理员'
+                    }else{
+                        this.message = '登录失败,请联系管理员'
+                    }
                     this.$message({
                         type: 'error',
                         message: res.msg.message ? res.msg.message : res.msg,

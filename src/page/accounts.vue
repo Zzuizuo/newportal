@@ -13,13 +13,14 @@
                             <p>添加账户</p>
                         </div>
                     </el-card>
-                    <el-card class="box-card" v-for="item in userList" :key="item.id" @click="handleEditAccount">
-                        <div class="userInfo">
-                            <img :src="item.headimgurl" alt="">
-                            <p class="username">{{item.username}}</p>
+                    <el-card class="box-card" v-for="item in userList" :key="item.id" >
+                        <div class="userInfo" @click="handleEditAccount(item)">
+                            <img :src="item.headimgurl ? item.headimgurl : defaultImg" alt="">
+                            <p class="username" v-if="item.activeMark">{{item.nickname}}</p>
+                            <p class="bindwx" v-else @click.stop="handleBindWx(item.id)">点击绑定微信</p>
                             <p class="text">{{item.authList.length}}项管理权限</p>
-                            <p class="time">12378</p>
-                            <span class="delete">删除</span>
+                            <p class="time">{{item.createdDate}}</p>
+                            <span class="delete" @click.stop="handleDeleteUser(item.id)">删除</span>
                         </div>
                     </el-card>
                 </div>
@@ -40,7 +41,8 @@ export default {
             filter: {
                 page: 1,
                 pageSize: 50,
-            }
+            },
+            defaultImg: require('../../static/img/defaultheadimg.png')
         }
     },
     computed:{
@@ -50,6 +52,7 @@ export default {
         
     },
     created(){
+        this.$store.commit('handleUnbindWx')
         this.$store.commit('handleShowMenu')
         this.loadAccountsData()
     },
@@ -57,8 +60,30 @@ export default {
         handleAddAccount(){
             this.$router.push({name: 'account/detail',params: {type: 'create'}})
         },
-        handleEditAccount(){
-
+        handleEditAccount(item){
+            if(item.activeMark){
+                this.$router.push({name: 'account/detail',params: {type: 'edit',userId: item.id}})
+            }else{
+                return
+            }
+        },
+        handleBindWx(id){
+            this.$store.commit('handleBindWx')
+            this.$store.commit('handleGetUserId',id)
+            this.$router.push({name: 'scan'})
+        },
+        handleDeleteUser(id){
+            request.get(this, '/admin/user/del/'+ id).then((res) => {
+                if(res.code == 1){
+                    this.loadAccountsData()
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg.message ? res.msg.message : res.msg,
+                        showClose: true,
+                    })
+                }
+            })
         },
         loadAccountsData(){
             request.post(this, '/admin/user/webQuery',this.filter).then((res) => {
@@ -102,6 +127,7 @@ export default {
         text-align: center;
         color: #909399;
         margin-right: 20px;;
+        margin-bottom: 20px;
     }
     .addAccount{
         cursor: pointer;
@@ -117,6 +143,7 @@ export default {
         }
     }
     .userInfo{
+        cursor: pointer;
         position: relative;
         text-align: left;
         color: #303133;
@@ -133,6 +160,10 @@ export default {
         .username{
             font-size: 14px;
         }
+        .bindwx{
+            font-size: 14px;
+            color: #00c8fb;
+        }
         .time{
             font-size: 12px;
             margin-top: 6px;
@@ -140,7 +171,7 @@ export default {
         .delete{
             position: absolute;
             right: 0;
-            bottom: 0;
+            bottom: -2px;
             font-size: 14px;
             color: #00c8fb;
         }

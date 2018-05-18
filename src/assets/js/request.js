@@ -29,7 +29,7 @@ const io = (type, that, url, data) => {
                 }
             },(err)=>{
                 if(err.status == 403){
-                    that.$router.replace({name: 'login'})
+                    that.$router.replace({name: 'scan'})
                 }else if(err.status == 502){
                     resolve(errorResponse('服务器累了需要休息下，稍等两分钟吧'))
                 }else if(err.status == 302){
@@ -70,7 +70,7 @@ const io = (type, that, url, data) => {
 
             },(err)=>{
                 if(err.status == 403){
-                    that.$router.replace({name: 'login'})
+                    that.$router.replace({name: 'scan'})
                 }else if(err.status == 502){
                     resolve(errorResponse('服务器累了需要休息下，稍等两分钟吧'))
                 }else{

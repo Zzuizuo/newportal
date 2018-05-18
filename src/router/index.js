@@ -1,25 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Entrance from '@/components/entrance'
 
-import login from '@/page/login'
-import loginTransit from '@/page/logintransit'
+import scan from '@/page/scan'
+import scanTransit from '@/page/scantransit'
 
 import Accounts from '@/page/accounts'
 import accountsDetail from '@/page/accountdetail'
+
+import Shop from '@/page/shop'
 
 Vue.use(Router)
 
 export default new Router({
     routes: [
         {
-            path: '/login',
-            name: 'login',
-            component: login,
+            path: '/scan',
+            name: 'scan',
+            component: scan,
         },{
-            path: '/login/transit',
-            name: 'login-transit',
-            component: loginTransit,
+            path: '/scan/transit',
+            name: 'scan-transit',
+            component: scanTransit,
         },{
           path: '/admin',
           name: 'admin',
@@ -29,12 +32,15 @@ export default new Router({
                     path: 'accounts',
                     name: 'accounts',
                     component: Accounts,
-                },
-                {
+                },{
                     path: 'account/detail',
                     name: 'account/detail',
                     component: accountsDetail,
-                },
+                },{
+                    path: 'shop',
+                    name: 'shop',
+                    component: Shop,
+                }
           ]
       },
     ]

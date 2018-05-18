@@ -6,7 +6,7 @@
                     <p>成都人在旅途智慧旅游</p>
                     <img class="userimg" :src="userData.headimgurl" alt="">
                     <div class="username">
-                        <span>{{userData.username}}</span>
+                        <span>{{userData.nickname}}</span>
                         <i @click="handleLogout" class="iconfont icon-tuichu"></i>
                     </div>
                 </div>
@@ -25,19 +25,10 @@
                             <span slot="title">账号管理</span>
                         </el-menu-item>
 
-                        <el-submenu index="2">
-                            <template slot="title">
-                                <i class="el-icon-printer"></i>
-                                <span>内容管理</span>
-                            </template>
-                        </el-submenu>
-
-                        <el-submenu index="/admin/board">
-                            <template slot="title">
-                                <i class="el-icon-location"></i>
-                                <span>景区/酒店</span>
-                            </template>
-                        </el-submenu>
+                        <el-menu-item index="/admin/shop">
+                            <i class="el-icon-printer"></i>
+                            <span slot="title">景区/酒店</span>
+                        </el-menu-item>
 
                         <el-menu-item index="/admin/board">
                             <i class="el-icon-goods"></i>
@@ -97,11 +88,11 @@ export default {
             this.menuActive = this.$router.history.current.path
         }
 
-        //login
+        //scan
         if(sessionStorage.user){
             this.userData = JSON.parse(sessionStorage.user)
         }else{
-            this.$router.push({name: login})
+            this.$router.push({name: 'scan'})
         }
     },
     methods: {
@@ -119,9 +110,7 @@ export default {
             request.get(this, '/logout').then((res) => {
                 if(res.code == 1){
                     this.$store.commit('handleDisplayMenu')
-                    this.$router.push({
-                        name: 'login'
-                    })
+                    this.$router.push({name: 'scan'})
                 }else{
                     this.$message({
                         type: 'error',

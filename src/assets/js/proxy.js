@@ -1,8 +1,17 @@
 
 const apiList = {
+    //account
     login: '/wx/scan/login',
     logout: '/logout',
-    accounts: '/admin/user/webQuery'
+    accounts: '/admin/user/webQuery',
+    authList: '/admin/user/allAuthList',
+    createAccount: '/admin/user/create',
+    bindUser: '/admin/user/bind',
+    queryUser: '/admin/user/',
+    deleteUser: '/admin/user/del/',
+    userUpdata: '/admin/user/update'
+
+    //
 }
 
 let proxies = {}

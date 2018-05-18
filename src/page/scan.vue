@@ -27,7 +27,7 @@ export default{
                 appid: config.wxAppid,
                 scope: "snsapi_login",
                 // redirect_uri: encodeURIComponent(config.host+"/wx/scan/login"),
-                redirect_uri: encodeURIComponent(config.host+"/#/login/transit"),
+                redirect_uri: encodeURIComponent(config.host+"/#/scan/transit"),
                 state: Math.ceil(Math.random() * 1000),
                 style: "black",
                 href: ""

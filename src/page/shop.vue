@@ -6,23 +6,31 @@
             </el-header>
             <el-main>
                 <div class="buttonbox">
-                    <el-input
-                        placeholder="输入关键词搜索"
-                        v-model="filter.key"
-                        style="width: 200px">
-                        <i slot="suffix" class="el-input__icon el-icon-search"></i>
-                    </el-input>
-                    <el-button type="primary">创建</el-button>
+                    <div class="searchbox">
+                        <el-input
+                            placeholder="输入关键词搜索"
+                            v-model="filterKey"
+                            style="width: 240px">
+                            <el-button icon="el-icon-search" style="background: #00CBFB;color: #fff;border-radius: 0" type="primary"></el-button>
+                        </el-input>
+                        
+                    </div>
+                    <el-button type="primary" @click="handleCreateShop">创建</el-button>
                 </div>
                 <div>
-                    <el-table :data="tableData" style="width: 100%">
-                        <el-table-column prop="date" label="编号" width="180"></el-table-column>
-                        <el-table-column prop="date" label="景区" width="180"></el-table-column>
-                        <el-table-column prop="date" label="商品数量" width="180"></el-table-column>
-                        <el-table-column prop="date" label="类型" width="180"></el-table-column>
-                        <el-table-column prop="date" label="联系人" width="180"></el-table-column>
-                        <el-table-column prop="date" label="联系电话" width="180"></el-table-column>
-                        <el-table-column prop="date" label="操作" width="180"></el-table-column>
+                    <el-table :data="tableData" v-loading="tableLoading" style="width: 100%" :header-cell-style="{background: '#DDE6EB'}">
+                        <el-table-column prop="id" label="编号" ></el-table-column>
+                        <el-table-column prop="id" label="景区" ></el-table-column>
+                        <el-table-column prop="id" label="商品数量" ></el-table-column>
+                        <el-table-column prop="id" label="类型" ></el-table-column>
+                        <el-table-column prop="id" label="联系人" ></el-table-column>
+                        <el-table-column prop="id" label="联系电话" ></el-table-column>
+                        <el-table-column label="操作" >
+                            <template slot-scope="scope">
+                                <a href="javascript:;" @click="handleMerchantEdit(scope)" class="link">详情</a>
+                                <a href="javascript:;" @click="handleMerchantEdit(scope)" class="link">相关商品</a>
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </div>
             </el-main>
@@ -38,12 +46,16 @@ export default {
     },
     data () {
         return {
+            tableLoading: false,
             userList: [],
             filter: {
                 key: '',
                 page: 1,
                 pageSize: 50,
             },
+            tableData: [{
+                id: 0,
+            }]
         }
     },
     computed:{
@@ -53,56 +65,21 @@ export default {
         
     },
     created(){
-        this.$store.commit('handleUnbindWx')
         this.$store.commit('handleShowMenu')
-        this.loadAccountsData()
+        this.loadData()
     },
     methods: {
-        handleAddAccount(){
-            this.$router.push({name: 'account/detail',params: {type: 'create'}})
+        handleCreateShop(){
+            this.$router.push({name: 'shop/create'})
         },
-        handleEditAccount(item){
-            if(item.activeMark){
-                this.$router.push({name: 'account/detail',params: {type: 'edit',userId: item.id}})
-            }else{
-                return
-            }
-        },
-        handleBindWx(id){
-            this.$store.commit('handleBindWx')
-            this.$store.commit('handleGetUserId',id)
-            this.$router.push({name: 'scan'})
-        },
-        handleDeleteUser(id){
-            request.get(this, '/admin/user/del/'+ id).then((res) => {
-                if(res.code == 1){
-                    this.loadAccountsData()
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg.message ? res.msg.message : res.msg,
-                        showClose: true,
-                    })
-                }
-            })
-        },
-        loadAccountsData(){
-            request.post(this, '/admin/user/webQuery',this.filter).then((res) => {
-                if(res.code == 1){
-                    this.userList = res.data.content
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg.message ? res.msg.message : res.msg,
-                        showClose: true,
-                    })
-                }
-            })
+        loadData(){
+            
         }
     }
 }
 </script>
 <style lang="less">
+@colorBlue: #00c8fb;
 .shop{
     .el-header{
         box-sizing: border-box;
@@ -117,6 +94,19 @@ export default {
         justify-content: space-between;
         align-items: center;
         height: 60px;
+    }
+    .searchbox{
+        display: flex;
+        padding: 7.5px 20px;
+    }
+    .link{
+        color: @colorBlue;
+        text-decoration: none;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+    .link:hover{
+        text-decoration: underline;
     }
 }
 

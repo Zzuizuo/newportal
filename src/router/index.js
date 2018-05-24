@@ -10,6 +10,8 @@ import Accounts from '@/page/accounts'
 import accountsDetail from '@/page/accountdetail'
 
 import Shop from '@/page/shop'
+import ShopCreate from '@/page/shopcreate'
+import ShopAdvance from '@/page/shopadvance'
 
 Vue.use(Router)
 
@@ -40,7 +42,16 @@ export default new Router({
                     path: 'shop',
                     name: 'shop',
                     component: Shop,
+                },{
+                    path: 'shop/create',
+                    name: 'shop/create',
+                    component: ShopCreate,
+                },{
+                    path: 'shop/advance',
+                    name: 'shop/advance',
+                    component: ShopAdvance,
                 }
+
           ]
       },
     ]

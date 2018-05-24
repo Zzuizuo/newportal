@@ -111,10 +111,7 @@ export default {
         height: 60px;
         line-height: 60px;
     }
-    .tips{
-        color: #909399;
-        font-size: 12px;
-    }
+  
     .bigbox{
         margin-top: 20px;
         display: flex;

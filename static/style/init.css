@@ -370,3 +370,12 @@ display: table;
 white-space: nowrap;
 word-break: break-all;
 }
+
+.el-table{
+    border: 1px solid #f0f0f2;
+    margin-top: 20px;
+}
+.tips{
+    color: #909399;
+    font-size: 12px;
+}

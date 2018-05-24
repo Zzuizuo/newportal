@@ -1,5 +1,7 @@
 
 const apiList = {
+    //qiniu
+    uploadimg: '/admin/qiniu/getUpToken',
     //account
     login: '/wx/scan/login',
     logout: '/logout',
@@ -9,9 +11,11 @@ const apiList = {
     bindUser: '/admin/user/bind',
     queryUser: '/admin/user/',
     deleteUser: '/admin/user/del/',
-    userUpdata: '/admin/user/update'
+    userUpdata: '/admin/user/update',
 
-    //
+    //shop
+    createShop: '/admin/shop',
+    queryShop: '/admin/shop/webQuery'
 }
 
 let proxies = {}

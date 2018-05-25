@@ -68,12 +68,13 @@ export default{
         },
         handleUploadSuccess(res,file,fileList){
             this.fileList = [fileList[fileList.length - 1]]
-            this.$message({
-                showClose: true,
-                message: '上传成功',
-                type: 'success'
-            })
+            // this.$message({
+            //     showClose: true,
+            //     message: '上传成功',
+            //     type: 'success'
+            // })
             this.$emit('on-success',res)
+            this.$emit('on-add-img',res)
         },
         handleUploadError(res){
             this.$emit('on-error',res)

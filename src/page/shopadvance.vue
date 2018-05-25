@@ -37,11 +37,18 @@
                             @on-remove="handleUploadRemove"/>
                         </el-form-item>
                         <el-form-item label="简介">
-                            <el-input v-model="shopform.name" type="textarea" style="width: 500px"></el-input>
+                            <el-input v-model="shopform.intro" type="textarea" style="width: 500px"></el-input>
                             <p class="tips">限200字以内</p>
                         </el-form-item>
                         <el-form-item label="详细介绍">
-                            <imgtext></imgtext>
+                            <imgtext
+                                :data-list="shopform.details"
+                                @on-add-text="handleAddText"
+                                @on-add-img="handleAddImg"
+                                @on-sort="handleChangeSort"
+                                @on-edit="handleEditText"
+                                @on-delete-item="handleDeleteItem"
+                            ></imgtext>
                             <p class="tips">限16字以内</p>
                         </el-form-item>
                     </el-form>
@@ -49,9 +56,6 @@
                         <el-button type="primary" @click="handleUpdataShop">保存</el-button>
                     </div>
                 </div>
-     
-    
-                
             </el-main>
         </el-container>
  
@@ -69,6 +73,18 @@
             @on-turanpage="onTurnPage"
             @on-cancle="onCancle">
         </pickdata>
+
+        <el-dialog
+        title="添加文字"
+        :visible.sync="detailDialogVisible"
+        :modal-append-to-body="false"
+        :before-close="handleClose">
+        <el-input v-model="text" type="textarea" style="width: 500px"></el-input>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="detailDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -103,8 +119,13 @@ export default {
             totalEl: 0,
             menuList: [{name: '景区',index: 'shop'}],
 
+            //detail
+            detailDialogVisible: false,
+            text: '',
+
             shopform:{
-                imgUrl: ''
+                imgUrl: '',
+                details: []
             },
             formRules: {
        
@@ -184,7 +205,37 @@ export default {
             })
         },
 
-
+        //detail
+        handleAddText(){
+            this.detailDialogVisible = true
+        },  
+        handleAddImg(res){
+            let img = 'http://cdn.genwoshua.com/' + res.key
+            this.shopform.details.push({type: 'img',content: img})
+        },
+        handleChangeSort(index,type){
+            let arr = [...this.shopform.details]
+            if(type == 'up'){
+                arr[index] = this.shopform.details[index-1]
+                arr[index-1] = this.shopform.details[index]
+            }else{
+                arr[index] = this.shopform.details[index+1]
+                arr[index+1] = this.shopform.details[index]
+            }
+            this.shopform.details = []
+            arr.map(item => {
+                this.shopform.details.push(item)
+            })
+        },
+        handleEditText(index){
+            
+        },
+        handleDeleteItem(index){
+            this.shopform.details.splice(index,1)
+        },
+        handleClose(){
+            this.detailDialogVisible = false
+        },
 
         loadData(){
             request.get(this, '/admin/shop/' + this.shopId).then((res) => {

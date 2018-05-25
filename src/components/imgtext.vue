@@ -1,38 +1,55 @@
 <template>
-    <div id="scrollbarbox">
-        <el-scrollbar class="scrollbar">
-            <div class="content">
-                <div v-for="(item,index) in imgtextList" :key="index">
-                    <img v-if="item.type == 'img'" :src="item.content" alt="">
-                    <p v-else>{{item.content}}</p>
-                </div>
-            </div>
-            <div class="editbox" @mousemove="handlemouseIn" @mouseout="handleMouseOut">
-                <i v-if="!isAdd" class="el-icon-plus add"></i>
-                <div v-else class="addbox">
-                    <div class="picbox">
-                        <uploadimg :image-url="imgUrl" :is-multiple="false" :has-plus-icon="true"
-                            class="uploadimg"
-                            @on-success="handleAddImg" 
-                            @on-error="handleError"
-                            @on-remove="handleUploadRemove">
-                            <template slot="icon">
-                                <div class="pic">
-                                    <i class="el-icon-picture-outline"></i>
-                                    <p class="text">添加图片</p>
-                                </div>
-                            </template>
-                        </uploadimg>
+    <div>
+        <div id="scrollbarbox">
+            <el-scrollbar class="scrollbar">
+                <div class="content">
+                    <div v-for="(item,index) in imgtextList" :key="index" class="imgtextitem" 
+                    @mousemove="handleItemMousein(index)" @mouseout="handleItemMouseOut()">
+                        <div class="img" v-if="item.type == 'img'">
+                            <img :src="item.content" alt="">
+                        </div>
+                        <div class="text" v-else>
+                            <p>{{item.content}}</p>
+                        </div>
+                        <div class="itemmask" v-show="maskShow && index === currentIndex">
+                            <div class="maskicon">
+                                <i v-if="index != imgtextList.length - 1" class="el-icon-sort-down" @click="handleChangeListDown(index)"></i>
+                                <i v-if="index != 0" class="el-icon-sort-up" @click="handleChangeListUp(index)"></i>
+                                <i v-if="item.type != 'img'" class="el-icon-edit" @click="handleEdit(index)"></i>
+                                <i class="el-icon-delete" @click="handleDelete(index)"></i>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div class="editbox" @mousemove="handlemouseIn" @mouseout="handleMouseOut">
+                    <i v-if="!isAdd" class="el-icon-plus add"></i>
+                    <div v-show="isAdd" class="addbox">
+                        <div class="picbox">
+                            <uploadimg :image-url="imgUrl" :is-multiple="false" :has-plus-icon="true"
+                                class="uploadimg"
+                                @on-add-img="handleAddImg" 
+                                @on-error="handleError"
+                                @on-remove="handleUploadRemove">
+                                <template slot="icon">
+                                    <div class="pic">
+                                        <i class="el-icon-picture-outline"></i>
+                                        <p class="text">添加图片</p>
+                                    </div>
+                                </template>
+                            </uploadimg>
+                        </div>
 
-                    <div class="text" @click="handleAddText">
-                        <i class="el-icon-document"></i>
-                        <p>添加文字</p>
+                        <div class="text" @click="handleAddText">
+                            <i class="el-icon-document"></i>
+                            <p>添加文字</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </el-scrollbar>
+            </el-scrollbar>
+        </div>
+        
     </div>
+    
 </template>
 <script>
 import request from '@/assets/js/request'
@@ -45,21 +62,33 @@ export default{
     data(){
         return{
             isAdd: false,
+            maskShow: false,
+            currentIndex: null,
             imgUrl: '',
             imgtextList: [],
         }
     },
     props:{
-        
+        dataList: {
+            type: Array,
+            default: []
+        }
     },
     computed:{
-
+            
     },
     watch: {
+        dataList(list){
+            this.imgtextList = list
 
+            // this.imgtextList = []
+            // list.map(item => {
+            //     this.imgtextList.push(item)
+            // })
+        }
     },
     created(){
-
+  
     },
     methods:{
         handlemouseIn(){
@@ -70,7 +99,7 @@ export default{
         },
 
         handleAddText(){
-
+            this.$emit('on-add-text')
         },
         handleAddImg(res){
             this.$message({
@@ -78,8 +107,7 @@ export default{
                 message: '上传成功',
                 type: 'success'
             })
-            let img = 'http://cdn.genwoshua.com/' + res.key + '?imageMogr2/thumbnail/!120x120r/gravity/Center/crop/120x120'
-            this.imgtextList.push({type: 'img',content: img})
+            this.$emit('on-add-img',res)
         },
         handleError(res){
             this.$message({
@@ -89,7 +117,31 @@ export default{
             })
         },
         handleUploadRemove(res){
-        }
+        },
+
+
+        handleItemMousein(index){
+            this.currentIndex = index
+            this.maskShow = true
+        },
+        handleItemMouseOut(){
+            this.currentIndex = null
+            this.maskShow = false
+        },
+        handleChangeListDown(index){
+            this.$emit('on-sort',index,'down')
+        },
+        handleChangeListUp(index){
+            this.$emit('on-sort',index,'up')
+        },
+        handleEdit(index){
+            this.$emit('on-edit',index)
+        },
+        handleDelete(index){
+            this.$emit('on-delete-item',index)
+        },
+
+       
     },
 }
 </script>
@@ -104,7 +156,45 @@ export default{
         padding: 20px;
         box-sizing: border-box;
         .content{
-
+            .imgtextitem{
+                position: relative;
+                .itemmask{
+                    display: flex;
+                    align-items: center;
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background: rgba(255,255,255,.8);
+                    .maskicon{
+                        display: flex;
+                        justify-content: space-around;
+                        cursor: pointer;
+                        width: 100%;
+                        padding: 0 50px;
+                        font-size: 25px;
+                        text-align: center;
+                        color: #C0C4CC;
+                        i{
+                            &:hover{
+                                color: #606266;
+                            }
+                        }
+                    }
+                }
+            }
+            .img{
+                width: 100%;
+                margin-bottom: 10px;
+                img{
+                    width: 100%;
+                }
+            }
+            .text{
+                width: 100%;
+                margin-bottom: 10px;
+            }
         }
         .editbox{
             position: relative;
@@ -164,6 +254,9 @@ export default{
     .avatar-uploader .el-upload {
         border: 0;
         color: #C0C4CC;
+    }
+    .el-upload-list__item-name,.el-upload-list__item-status-label{
+        display: none;
     }
 }
 </style>

@@ -41,11 +41,7 @@
                             <p class="tips">限200字以内</p>
                         </el-form-item>
                         <el-form-item label="详细介绍">
-                            <div style="height: 300px">
-                                <el-scrollbar style="height: 100%;">
-                                    <div class="detailbox"></div>
-                                </el-scrollbar>
-                            </div>
+                            <imgtext></imgtext>
                             <p class="tips">限16字以内</p>
                         </el-form-item>
                     </el-form>
@@ -80,10 +76,11 @@
 import request from '@/assets/js/request'
 import uploadimg from '@/components/uploadimg'
 import pickdata  from '@/components/pickdata'
+import imgtext  from '@/components/imgtext'
 
 export default {
     components: {
-        uploadimg, pickdata
+        uploadimg, pickdata, imgtext
     },
     data () {
         return {
@@ -292,27 +289,10 @@ export default {
         }
     }
 
-    .my-scrollbar{
-        width: 35%;
-        min-width: 300px;
-        max-height: 450px;
-    }
-    
-    .scroll-me{
-        min-width: 750px;
-    }
-
     .buttonbox{
         display: flex;
         justify-content: center;
         margin-top: 60px;
-    }
-    .el-scrollbar__wrap {
-        overflow-x: hidden;
-    }
-    .detailbox{
-        height: 1000px;
-        background: #00c8fb;
     }
 }
 

@@ -11,8 +11,15 @@
             :file-list="fileList"
             :multiple="isMultiple"
             :data="uploadObj">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" @click="handleGetToken">
-            <i v-else class="el-icon-plus avatar-uploader-icon videobox" @click="handleGetToken"></i>
+            <div v-if="!hasPlusIcon">
+                <img v-if="imageUrl" :src="imageUrl" class="avatar" @click="handleGetToken">
+                <i v-else class="el-icon-plus avatar-uploader-icon videobox" @click="handleGetToken"></i>
+            </div>
+            <div v-else>
+                <div @click="handleGetToken">
+                    <slot name="icon"></slot>
+                </div>
+            </div>            
         </el-upload>
     </div>
 </template>
@@ -37,6 +44,10 @@ export default{
         imageUrl: {
             type: String,
             default: ''
+        },
+        hasPlusIcon: {
+            type: Boolean,
+            default: false,
         }
     },
     computed:{
@@ -65,11 +76,7 @@ export default{
             this.$emit('on-success',res)
         },
         handleUploadError(res){
-            this.$message({
-                showClose: true,
-                message: '上传失败',
-                type: 'error'
-            })
+            this.$emit('on-error',res)
         },
         beforeAvatarUpload(file) {
             // this.$emit('on-checkImg',file)

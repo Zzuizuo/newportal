@@ -23,7 +23,7 @@
                             placeholder="输入关键词搜索"
                             v-model="filterKey"
                             style="width: 240px">
-                            <el-button icon="el-icon-search" style="background: #00CBFB;color: #fff;border-radius: 0" slot="append" type="primary" @click="handleSearch"></el-button>
+                            <el-button icon="el-icon-search" style="background: #00CBFB;color: #fff;border-radius: 0;border: 1px solid #00c8fb" slot="append" type="primary" @click="handleSearch"></el-button>
                         </el-input>
                         
                     </div>

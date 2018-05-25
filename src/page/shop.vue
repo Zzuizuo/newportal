@@ -10,8 +10,8 @@
                         <el-input
                             placeholder="输入关键词搜索"
                             v-model="filterKey"
-                            style="width: 240px">
-                            <el-button icon="el-icon-search" style="background: #00CBFB;color: #fff;border-radius: 0" type="primary"></el-button>
+                            style="width: 300px">
+                            <el-button slot="append" icon="el-icon-search" style="background: #00CBFB;color: #fff;border-radius: 0;border: 1px solid #00c8fb" type="primary"></el-button>
                         </el-input>
                         
                     </div>
@@ -97,7 +97,6 @@ export default {
     }
     .searchbox{
         display: flex;
-        padding: 7.5px 20px;
     }
     .link{
         color: @colorBlue;

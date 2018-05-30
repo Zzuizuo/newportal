@@ -51,7 +51,7 @@
                         </el-menu-item>
                 </el-menu>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="20" style="background: #fff;min-height: 100vh">
                 <Entrance/>
             </el-col>
         </el-row>
@@ -126,10 +126,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+.tac{
+    min-height: 100vh;
+    background: #f0f0f2;
+}
 .menu{
     // min-width: 200px;
     min-height: 100vh;
-    background: #f0f0f2;
 }
 .admin{
     text-align: center;

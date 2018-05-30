@@ -25,7 +25,6 @@
                             style="width: 240px">
                             <el-button icon="el-icon-search" style="background: #00CBFB;color: #fff;border-radius: 0;border: 1px solid #00c8fb" slot="append" type="primary" @click="handleSearch"></el-button>
                         </el-input>
-                        
                     </div>
                     <div class="choosebox">
                         <el-tooltip class="chooseitem" v-for="(item,index) in chooseData" :key="index" placement="bottom"
@@ -34,7 +33,7 @@
                             <div @click="handleChooseItem(item)">
                                 <i v-if="!multiple" :class="['el-icon-check', 'choosesign', selectObj.id == item.id ? 'choosesignActive' : '']"></i>
                                 <i v-else :class="['el-icon-check', 'choosesign', checkItem(item) ? 'choosesignActive' : '']"></i>
-                                <img :src="item.imgUrl" class="image">
+                                <img :src="item.imgUrl + '?imageMogr2/thumbnail/!160x120r/gravity/Center/crop/160x120'" class="image">
                                 <div class="text">{{item.name}}</div>
                             </div>
                         </el-tooltip>
@@ -44,7 +43,7 @@
                             layout="prev, pager, next"
                             @current-change="handlePageChange"
                             :current-page="filter.page"
-                            :page-size="1"
+                            :page-size="8"
                             :total="totaldata">
                         </el-pagination>
                     </div>
@@ -80,7 +79,7 @@
             },
             multiple: {
                 type: Boolean,
-                default: true
+                default: false
             },
         },
         data(){
@@ -93,7 +92,7 @@
                 multiSelectObj: [],
 
                 filter: {
-                    pageSize: 1,
+                    pageSize: 8,
                     page: 1,
                 },
             }
@@ -159,7 +158,13 @@
                 this.$emit('on-turanpage',page)
             },
             handleComplete(){
-                this.$emit('on-complete',this.selectObj,this.multiSelectObj)
+                let data = null
+                if(this.multiple){
+                    data = this.multiSelectObj
+                }else{
+                    data = this.selectObj
+                }
+                this.$emit('on-complete',data)
             }
         }
     }

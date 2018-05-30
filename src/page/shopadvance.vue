@@ -24,7 +24,7 @@
                     <div class="tipbox">
                         <i class="el-icon-warning"></i>为更高效的管理商家，建议立即完善以下信息
                     </div>
-                    <el-form ref="shopform" :model="shopform" label-width="180px" :rules="formRules">
+                    <el-form ref="shopform" :model="shopform" label-width="180px">
                         <el-form-item label="所属景点" v-if="shopData.shopType == 'HOTEL'">
                             <el-input :disabled="true" :value="relationContent" placeholder="请选择相关联内容" style="width: 400px;">
                                 <el-button slot="append" style="background: #fff" @click="handleSelectContent">关联内容</el-button>
@@ -32,9 +32,18 @@
                             <p class="tips">用户可以通过景点找到您的酒店</p>
                         </el-form-item>
                         <el-form-item label="商家图片">
-                            <uploadimg :image-url="shopform.imgUrl" :is-multiple="false" 
+                            <uploadimg :image-url="shopform.imgUrl ? shopform.imgUrl + '?imageMogr2/thumbnail/!120x120r/gravity/Center/crop/120x120' : ''" 
+                            :is-show-file-list="true"
                             @on-success="handleUploadSuccess" 
                             @on-remove="handleUploadRemove"/>
+                        </el-form-item>
+                        <el-form-item label="其他图片">
+                            <uploadimg :image-list="shopform.imgList" 
+                            :is-multiple="true" 
+                            :width="800"
+                            @on-delete="handleDeleteImg"
+                            @on-edit-success="handleEditImg"
+                            @on-success="handleUploadMultipleSuccess"/>
                         </el-form-item>
                         <el-form-item label="简介">
                             <el-input v-model="shopform.intro" type="textarea" style="width: 500px"></el-input>
@@ -49,7 +58,6 @@
                                 @on-edit="handleEditText"
                                 @on-delete-item="handleDeleteItem"
                             ></imgtext>
-                            <p class="tips">限16字以内</p>
                         </el-form-item>
                     </el-form>
                     <div class="buttonbox">
@@ -60,7 +68,7 @@
         </el-container>
  
         <pickdata 
-            :title="'shijain'"
+            :title="pickTitle"
             :visible="dialogVisible"
             :pickdata="pickDataList"
             :totaldata="totalEl"
@@ -78,12 +86,13 @@
         title="添加文字"
         :visible.sync="detailDialogVisible"
         :modal-append-to-body="false"
-        :before-close="handleClose">
-        <el-input v-model="text" type="textarea" style="width: 500px"></el-input>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="detailDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-        </span>
+        top="50vh"
+        :before-close="handleDialogClose">
+            <el-input v-model="detailText" type="textarea" :autosize="textareaHeight" style="width: 500px;"></el-input>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="detailDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="handleAddTextComplete">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -105,7 +114,7 @@ export default {
 
 
             //pickdata
-            title: 'gggg',
+            pickTitle: '选择景区',
             relationContent: '',
             dialogVisible: false,
             filter: {
@@ -121,14 +130,19 @@ export default {
 
             //detail
             detailDialogVisible: false,
-            text: '',
+            detailText: '',
+            textareaHeight: {
+                minRows: 3,
+                maxRows: 10 
+            },
+            isEdit: false,
+            detailIndex: null,
 
             shopform:{
+                id: '',
                 imgUrl: '',
-                details: []
-            },
-            formRules: {
-       
+                details: [],
+                imgList: [],
             },
         }
     },
@@ -143,11 +157,13 @@ export default {
 
         if(params.id){
             this.shopId = params.id
+            this.shopform.id = params.id
             sessionStorage.shopId = params.id
         }
 
         if(sessionStorage.shopId){
             this.shopId = sessionStorage.shopId
+            this.shopform.id = sessionStorage.shopId
         }
 
         this.loadData()
@@ -158,13 +174,20 @@ export default {
             this.$router.history.go(-1)
         },
         handleUploadSuccess(res){
-            this.shopform.imgUrl = 'http://cdn.genwoshua.com/' + res.key + '?imageMogr2/thumbnail/!120x120r/gravity/Center/crop/120x120'
+            this.shopform.imgUrl = 'http://cdn.genwoshua.com/' + res.key
         },
         handleUploadRemove(res){
             this.shopform.imgUrl = ''
         },
-        handleUpdataShop(){
-            
+        handleUploadMultipleSuccess(res){
+            this.shopform.imgList.push('http://cdn.genwoshua.com/' + res.key)
+        },
+        handleDeleteImg(index){
+            this.shopform.imgList.splice(index,1)
+        },
+        handleEditImg(res,index,cb){
+            this.shopform.imgList[index] = 'http://cdn.genwoshua.com/' + res.key
+            cb && cb()
         },
         handleSelectContent(){
             this.dialogVisible = true
@@ -187,7 +210,10 @@ export default {
             this.filter.page = page
             this.onLoadPickData()
         },
-        onComplete(selectObj,multiSelectObj){
+        onComplete(selectObj){
+            this.dialogVisible = false
+            this.relationContent = selectObj.name
+            this.shopform.relateShop = selectObj
             this.pickedData = selectObj
         },
         loadPickData(url){
@@ -228,15 +254,44 @@ export default {
             })
         },
         handleEditText(index){
-            
+            this.isEdit = true
+            this.detailIndex = index
+            this.detailDialogVisible = true
+            this.detailText = this.shopform.details[index].content
         },
         handleDeleteItem(index){
             this.shopform.details.splice(index,1)
         },
-        handleClose(){
+        handleDialogClose(){
             this.detailDialogVisible = false
         },
+        handleAddTextComplete(){
+            if(this.isEdit){
+                this.shopform.details[this.detailIndex].content = this.detailText
+            }else{
+                this.shopform.details.push({
+                    type: 'text',
+                    content: this.detailText
+                })
+            }
+            this.detailDialogVisible = false
+            this.isEdit = false
+            this.detailText = ''
+        },
 
+        handleUpdataShop(){
+            request.post(this, '/admin/shop/update', this.shopform).then((res) => {
+                if(res.code == 1){
+                    this.$router.history.go(-1)
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg.message ? res.msg.message : res.msg,
+                        showClose: true,
+                    })
+                }
+            })
+        },
         loadData(){
             request.get(this, '/admin/shop/' + this.shopId).then((res) => {
                 if(res.code == 1){

@@ -1,7 +1,7 @@
 <template>
     <div class="tapbox">
         <div class="boxtop">
-            <div class="nodata">没有人任何数据</div>
+            <div class="nodata">没有任何数据</div>
         </div>
         <div class="boxbottom">
             <a href="javascript:;" @click="handleMerchantEdit(scope)" class="link">添加</a>

@@ -45,7 +45,7 @@
                                 <el-input v-model="shopform.address.address"  auto-complete='address-line2' placeholder="详细地址" style="width: 400px;margin: 0 20px"></el-input>
                                 <el-button @click="handleSearchMark">搜索标注</el-button>
                             </div>
-                            <Map class="map" :address="mapAddress" :change-option="handleMapChange" :width="800" :height="400" :lng="shopform.address.lng" :lat="shopform.address.lat"></Map>
+                            <Map class="map" :id="'createmap'" :address="mapAddress" :change-option="handleMapChange" :width="800" :height="400" :lng="shopform.address.lng" :lat="shopform.address.lat"></Map>
                         </el-form-item>
                     </el-form>
                     <div class="buttonbox">

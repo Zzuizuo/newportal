@@ -12,6 +12,7 @@ import accountsDetail from '@/page/accountdetail'
 import Shop from '@/page/shop'
 import ShopCreate from '@/page/shopcreate'
 import ShopAdvance from '@/page/shopadvance'
+import ShopDetail from '@/page/shopdetail'
 
 Vue.use(Router)
 
@@ -26,11 +27,11 @@ export default new Router({
             name: 'scan-transit',
             component: scanTransit,
         },{
-          path: '/admin',
-          name: 'admin',
-          component: Entrance,
-          children: [
-               {
+            path: '/admin',
+            name: 'admin',
+            component: Entrance,
+            children: [
+                {
                     path: 'accounts',
                     name: 'accounts',
                     component: Accounts,
@@ -50,9 +51,12 @@ export default new Router({
                     path: 'shop/advance',
                     name: 'shop/advance',
                     component: ShopAdvance,
+                },{
+                    path: 'shop/detail',
+                    name: 'shop/detail',
+                    component: ShopDetail,
                 }
-
-          ]
+            ]
       },
     ]
 })

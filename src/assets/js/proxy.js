@@ -15,7 +15,8 @@ const apiList = {
 
     //shop
     createShop: '/admin/shop',
-    queryShop: '/admin/shop/webQuery'
+    queryShop: '/admin/shop/webQuery',
+    updataShop: '/admin/shop/update',
 }
 
 let proxies = {}

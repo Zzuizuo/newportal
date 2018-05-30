@@ -1,5 +1,5 @@
 <template>
-    <div id="map-container" :style="{height: height+'px', width: width+'px'}"></div>
+    <div :id="id" :style="{height: height+'px', width: width+'px'}"></div>
 </template>
 
 <script>
@@ -10,6 +10,7 @@ export default{
         height: Number,
         lat: Number,
         lng: Number,
+        id: String,
         changeOption: Function,
         address: String,
         preview:{
@@ -25,13 +26,13 @@ export default{
     },
     mounted(){
         if(this.lng && this.lat){
-            this.map = new AMap.Map('map-container',{
+            this.map = new AMap.Map(this.id,{
                 resizeEnable: true,
                 zoom: 14,
                 center: [this.lng, this.lat]
             })
         }else{
-            this.map = new AMap.Map('map-container',{
+            this.map = new AMap.Map(this.id,{
                 resizeEnable: true,
                 zoom: 14
             })  

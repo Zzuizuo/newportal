@@ -21,13 +21,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="editbox" @mousemove="handlemouseIn" @mouseout="handleMouseOut">
+                <div class="editbox" v-if="isShowEdit" @mousemove="handlemouseIn" @mouseout="handleMouseOut">
                     <i v-if="!isAdd" class="el-icon-plus add"></i>
                     <div v-show="isAdd" class="addbox">
                         <div class="picbox">
                             <uploadimg :image-url="imgUrl" :is-multiple="false" :has-plus-icon="true"
                                 class="uploadimg"
-                                @on-add-img="handleAddImg" 
+                                :width="56"
+                                :is-show-file-list="true"
+                                @on-success="handleAddImg" 
                                 @on-error="handleError"
                                 @on-remove="handleUploadRemove">
                                 <template slot="icon">
@@ -39,7 +41,7 @@
                             </uploadimg>
                         </div>
 
-                        <div class="text" @click="handleAddText">
+                        <div class="textbox" @click="handleAddText">
                             <i class="el-icon-document"></i>
                             <p>添加文字</p>
                         </div>
@@ -72,6 +74,10 @@ export default{
         dataList: {
             type: Array,
             default: []
+        },
+        isShowEdit: {
+            type: Boolean,
+            default: true
         }
     },
     computed:{
@@ -80,7 +86,6 @@ export default{
     watch: {
         dataList(list){
             this.imgtextList = list
-
             // this.imgtextList = []
             // list.map(item => {
             //     this.imgtextList.push(item)
@@ -88,7 +93,7 @@ export default{
         }
     },
     created(){
-  
+        this.imgtextList = this.dataList
     },
     methods:{
         handlemouseIn(){
@@ -102,11 +107,6 @@ export default{
             this.$emit('on-add-text')
         },
         handleAddImg(res){
-            this.$message({
-                showClose: true,
-                message: '上传成功',
-                type: 'success'
-            })
             this.$emit('on-add-img',res)
         },
         handleError(res){
@@ -122,11 +122,15 @@ export default{
 
         handleItemMousein(index){
             this.currentIndex = index
-            this.maskShow = true
+            if(this.isShowEdit){
+                this.maskShow = true
+            }
         },
         handleItemMouseOut(){
             this.currentIndex = null
-            this.maskShow = false
+            if(this.isShowEdit){
+                this.maskShow = false
+            }
         },
         handleChangeListDown(index){
             this.$emit('on-sort',index,'down')
@@ -192,7 +196,10 @@ export default{
                 }
             }
             .text{
+                padding: 10px 10px;
+                line-height: 1.4;
                 width: 100%;
+                color: #606266;
                 margin-bottom: 10px;
             }
         }
@@ -214,8 +221,9 @@ export default{
             .addbox{
                 display: flex;
                 justify-content: space-around;
-                font-size: 50px;
+                font-size: 40px;
                 color: #C0C4CC;
+                text-align: center;
                 .picbox{
                     cursor: pointer;
                     position: relative;
@@ -223,6 +231,7 @@ export default{
                     p{
                         font-size: 14px;
                         text-align: center;
+                        height: 30px;
                     }
                     .uploadimg{
                         width: 56px;
@@ -230,17 +239,20 @@ export default{
                         opacity: 100%;
                     }
                     .pic{
+                        padding-top: 10px;
                         &:hover{
                             color: #606266
                         }
                     }
                 }
-                .text{
+                .textbox{
+                    padding-top: 10px;
                     cursor: pointer;
                     &:hover{
                         color: #606266
                     }
                     p{
+                        height: 30px;
                         font-size: 14px;
                         text-align: center;
                     }

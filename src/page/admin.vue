@@ -30,7 +30,7 @@
                             <span slot="title">景区/酒店</span>
                         </el-menu-item>
 
-                        <el-menu-item index="/admin/board">
+                        <el-menu-item index="/admin/products">
                             <i class="el-icon-goods"></i>
                             <span slot="title">商品管理</span>
                         </el-menu-item>

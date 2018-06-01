@@ -1,12 +1,11 @@
 <template>
-    <div class="accountadvance">
+    <div id="shopadvance">
         <el-container>
             <el-header>
                 <div class="header">
                     <p class="headertitle">{{shopData.shopType == 'SCENIC' ? '创建景区' : '创建酒店'}}</p>
                     <i class="el-icon-close close" @click="handleClose"></i>
                 </div>
-              
             </el-header>
             <el-main>
                 <div class="bigbox">
@@ -309,15 +308,9 @@ export default {
 }
 </script>
 <style lang="less">
-.accountadvance{
+#shopadvance{
     background: #f0f0f2;
     min-height: 100vh;
-    .el-checkbox{
-        display: block;
-    }
-    .el-checkbox:nth-child(1){
-        margin-left: 30px;
-    }
     .el-header{
         box-sizing: border-box;
         background: #f0f0f2;

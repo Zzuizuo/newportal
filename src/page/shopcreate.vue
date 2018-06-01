@@ -90,7 +90,7 @@ export default {
             },
             formRules: {
                 name: [
-                    {required: true, message: '请输入活动名称', trigger: 'blur' },
+                    {required: true, message: '请输入名称', trigger: 'blur' },
                     { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 shopType: [{ required: true, message: '请选择类别联系人', trigger: 'blur' }],

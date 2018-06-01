@@ -23,7 +23,7 @@
                         <el-table-column label="景区" >
                             <template slot-scope="scope">
                                 <div class="areabox">
-                                    <img :src="scope.row.imgUrl + + '?imageMogr2/thumbnail/!90x70r/gravity/Center/crop/90x70'" alt="">
+                                    <img :src="scope.row.imgUrl + '?imageMogr2/thumbnail/!90x70r/gravity/Center/crop/90x70'" alt="">
                                     <div>{{scope.row.name}}</div>
                                 </div>
                             </template>

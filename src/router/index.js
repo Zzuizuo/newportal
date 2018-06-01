@@ -14,6 +14,9 @@ import ShopCreate from '@/page/shopcreate'
 import ShopAdvance from '@/page/shopadvance'
 import ShopDetail from '@/page/shopdetail'
 
+import Products from '@/page/products'
+import ProductCreate from '@/page/productcreate'
+
 Vue.use(Router)
 
 export default new Router({
@@ -55,6 +58,14 @@ export default new Router({
                     path: 'shop/detail',
                     name: 'shop/detail',
                     component: ShopDetail,
+                },{
+                    path: 'products',
+                    name: 'products',
+                    component: Products,
+                },{
+                    path: 'product/create',
+                    name: 'product/create',
+                    component: ProductCreate,
                 }
             ]
       },

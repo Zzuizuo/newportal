@@ -19,7 +19,14 @@ const apiList = {
     updataShop: '/admin/shop/update',
 
     //product
-    queryProduct: '/admin/product/webQuery'
+    queryProduct: '/admin/product/webQuery',
+
+    //order
+    queryOrders: '/admin/order/webQuery',
+    getOrder: '/admin/order/',
+
+    //uselog
+    queryUseLog: '/admin/card/uselog/webQuery'
 }
 
 let proxies = {}

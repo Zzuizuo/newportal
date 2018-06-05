@@ -376,3 +376,15 @@ display: table;
     color: #909399;
     font-size: 12px;
 }
+
+.omit{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.omitMu{
+    overflow: hidden;    
+    display: -webkit-box;               
+    text-overflow: ellipsis;            
+    -webkit-box-orient: vertical;
+}

@@ -17,12 +17,17 @@ import ShopDetail from '@/page/shopdetail'
 import Products from '@/page/products'
 import ProductCreate from '@/page/productcreate'
 
+import Orders from '@/page/orders'
+import OrderDetail from '@/page/orderdetail'
+
+import UseLog from '@/page/uselog'
+
 Vue.use(Router)
 
 export default new Router({
     routes: [
         {
-            path: '/scan',
+            path: '/',
             name: 'scan',
             component: scan,
         },{
@@ -66,6 +71,18 @@ export default new Router({
                     path: 'product/create',
                     name: 'product/create',
                     component: ProductCreate,
+                },{
+                    path: 'orders',
+                    name: 'orders',
+                    component: Orders
+                },{
+                    path: 'order/detail',
+                    name: 'order/detail',
+                    component: OrderDetail
+                },{
+                    path: 'use-log',
+                    name: 'use-log',
+                    component: UseLog
                 }
             ]
       },

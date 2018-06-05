@@ -67,7 +67,7 @@
     </div>
 </template>
 <script>
-    import io from '@/util/io'
+    // import io from '@/util/io'
     let oldObj=null;
     let oldArr=[];
     

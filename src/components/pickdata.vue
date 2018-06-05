@@ -6,7 +6,7 @@
             :close-on-click-modal="false"
             width="1000px"
             >
-            <div class="pickbox">
+            <div id="pickbox">
                 <div class="menu">
                     <el-menu
                         :default-active="active"
@@ -173,7 +173,7 @@
 .el-dialog__body{
     padding: 30px;
 }
-.pickbox{
+#pickbox{
     display: flex;
     border: solid 1px #e6e6e6;
     .menu{
@@ -231,21 +231,15 @@
         }
     }
     .contentbootom{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
         .el-pagination{
             text-align: right;
         }
     }
+    .el-menu-item.is-active{
+        background: #2EC1E2;
+        color: #fff;
+    }
 }
-
-.el-menu-item.is-active{
-    background: #2EC1E2;
-    color: #fff;
-}
-
 </style>
 
     

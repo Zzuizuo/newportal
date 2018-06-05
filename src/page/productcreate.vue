@@ -18,7 +18,7 @@
                         <el-form-item label="商品图片" prop="imgUrl">
                             <uploadimg :image-url="productform.imgUrl ? productform.imgUrl + '?imageMogr2/thumbnail/!120x120r/gravity/Center/crop/120x120' : ''" 
                             :is-show-file-list="true"
-                            @on-success="handleUploadSuccess" 
+                            @on-success="handleUploadSuccess"
                             @on-remove="handleUploadRemove"/>
                         </el-form-item>
                         <el-form-item label="商品规格" prop="productType">
@@ -114,9 +114,18 @@
                                                 </div>
                                             </div>
 
-                                            <new-cal v-if="showCalendar" slot="calendar" :calendar-list="calendarArr" :detail="detailObj" :current-time="currentTime" :time="time"
-                                            :btn-visiable="true" @next="handleNext" @prev="handlePrev" @on-calendar-box="handleClick" @on-revise="reviseDetail" :old="oldArr"
-                                            ></new-cal>
+                                            <calendar v-if="showCalendar"
+                                            :calendar-list="calendarArr" 
+                                            :detail="detailObj" 
+                                            :current-time="currentTime" 
+                                            :time="time"
+                                            :btn-visiable="true" 
+                                            @next="handleNext" 
+                                            @prev="handlePrev" 
+                                            @on-calendar-box="handleClick" 
+                                            @on-revise="reviseDetail" 
+                                            :old="oldArr"
+                                            ></calendar>
                                         </div>
                                     </div>
                                     <div v-else></div>
@@ -181,20 +190,39 @@
                             </tap>
                         </el-form-item>
 
-
-                        <!-- <el-form-item label="卡券有效期">
-                            <el-input :disabled="true" :value="relationContent" placeholder="请选择相关联内容" style="width: 400px;">
+                        <el-form-item label="卡券有效期" prop="validity">
+                            <el-date-picker
+                            v-model="productform.validity"
+                            type="daterange"
+                            value-format="yyyy-MM-dd"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="景区/酒店" prop="relationContent">
+                            <el-input :disabled="true" :value="productform.relationContent" placeholder="请选择相关联内容" style="width: 400px;">
                                 <el-button slot="append" style="background: #fff" @click="handleSelectContent">关联内容</el-button>
                             </el-input>
-                            <p class="tips">用户可以通过景点找到您的酒店</p>
                         </el-form-item>
-                        <el-form-item label="景区/酒店">
-                            <uploadimg :image-url="productform.imgUrl ? productform.imgUrl + '?imageMogr2/thumbnail/!120x120r/gravity/Center/crop/120x120' : ''" 
-                            :is-show-file-list="true"
-                            @on-success="handleUploadSuccess" 
-                            @on-remove="handleUploadRemove"/>
+                        <!-- <el-form-item label="商品分类">    to do
+                            <uploadimg :image-list="productform.imgList" 
+                            :is-multiple="true" 
+                            :width="800"
+                            @on-delete="handleDeleteImg"
+                            @on-edit-success="handleEditImg"
+                            @on-success="handleUploadMultipleSuccess"/>
+                        </el-form-item> -->
+                        <div class="title">详细信息</div>
+                        <!-- <el-form-item label="商品标签">  to do
+                            <el-input v-model="productform.intro" type="textarea" style="width: 500px"></el-input>
+                            <p class="tips">限200字以内</p>
+                        </el-form-item> -->
+                        <el-form-item label="特别说明" prop="tips">
+                            <el-input v-model="productform.tips" type="textarea" style="width: 500px"></el-input>
+                            <p class="tips">限50字以内</p>
                         </el-form-item>
-                        <el-form-item label="商品分类">
+                        <el-form-item label="其他图片">
                             <uploadimg :image-list="productform.imgList" 
                             :is-multiple="true" 
                             :width="800"
@@ -202,11 +230,7 @@
                             @on-edit-success="handleEditImg"
                             @on-success="handleUploadMultipleSuccess"/>
                         </el-form-item>
-                        <el-form-item label="简介">
-                            <el-input v-model="productform.intro" type="textarea" style="width: 500px"></el-input>
-                            <p class="tips">限200字以内</p>
-                        </el-form-item>
-                        <el-form-item label="详细介绍">
+                        <el-form-item label="图文详情">
                             <imgtext
                                 :data-list="productform.details"
                                 @on-add-text="handleAddText"
@@ -215,7 +239,22 @@
                                 @on-edit="handleEditText"
                                 @on-delete-item="handleDeleteItem"
                             ></imgtext>
-                        </el-form-item> -->
+                        </el-form-item>
+                        <div class="title">推广信息</div>
+                        <el-form-item label="分销佣金占比" prop="distributionAwardPercent">
+                            <el-input v-model="productform.distributionAwardPercent" min="1" max="100" type="number" @change="handlePercentChange" style="width: 300px"></el-input>%
+                            <p class="tips">填写1-100数字，上下线比例为3 : 7</p>
+                        </el-form-item>
+                        <el-form-item label="分销海报" prop="posterUrl">
+                            <uploadimg :image-url="productform.posterUrl ? productform.posterUrl + '?imageMogr2/thumbnail/!120x120r/gravity/Center/crop/120x120' : ''" 
+                            :is-show-file-list="true"
+                            @on-success="handleUploadPosterUrl" 
+                            @on-remove="handleUploadRemovePosterUrl"/>
+                        </el-form-item>
+                        <el-form-item label="推荐值">
+                            <el-input v-model="productform.sortIndex" min="1" max="100" type="number" style="width: 200px"></el-input>
+                            <p class="tips">推荐值越大，商品排序越靠前</p>
+                        </el-form-item>
                     </el-form>
                     <div class="buttonbox">
                         <el-button type="primary" @click="handleUpdataShop">保存</el-button>
@@ -224,7 +263,7 @@
             </el-main>
         </el-container>
  
-        <!-- <pickdata 
+        <pickdata 
             :title="pickTitle"
             :visible="dialogVisible"
             :pickdata="pickDataList"
@@ -250,7 +289,7 @@
                 <el-button @click="detailDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="handleAddTextComplete">确 定</el-button>
             </span>
-        </el-dialog> -->
+        </el-dialog>
     </div>
 </template>
 
@@ -271,6 +310,17 @@ export default {
             productform:{
                 productType: 'CARD',
                 scaleList: [],
+                expireDate: '',
+                validDate: '',
+                imgList: [],
+                details: [],
+
+
+
+
+                //fake
+                validity: '',
+                relationContent: '',
             },
             formRules: {
                 name: [
@@ -283,6 +333,15 @@ export default {
                 productType: [
                     {required: true, message: '请填写规格' },
                 ],
+                validity: [
+                    {required: true, message: '请选择有效期' }
+                ],
+                relationContent: [
+                    {required: true, message: '请选择酒店/景区' }
+                ],
+                tips: [
+                    { min: 1, max: 50, message: '长度在 32 个字符以内', trigger: 'blur' }
+                ]
             },
             scale: {
                 name: '',
@@ -295,9 +354,9 @@ export default {
             isAddScale: false,
             hasEditData: false,
 
+
             //pickdata
             pickTitle: '选择景区',
-            relationContent: '',
             dialogVisible: false,
             filter: {
                 key: '',
@@ -319,15 +378,16 @@ export default {
             },
             isEdit: false,
             detailIndex: null,
-
-            
         }
     },
     computed:{
 
     },
     watch: {
-        
+        validity(val){
+            this.productform.validDate = val[0]
+            this.productform.expireDate = val[1]
+        }
     },
     created(){
         let params = this.$router.currentRoute.params
@@ -444,11 +504,12 @@ export default {
             this.productform.imgList[index] = 'http://cdn.genwoshua.com/' + res.key
             cb && cb()
         },
+        
+        //pickdata
         handleSelectContent(){
             this.dialogVisible = true
             this.onLoadPickData()
         },
-        //pickdata
         onCancle(){
             this.dialogVisible = false
         },
@@ -467,8 +528,8 @@ export default {
         },
         onComplete(selectObj){
             this.dialogVisible = false
-            this.relationContent = selectObj.name
-            this.productform.relateShop = selectObj
+            this.productform.relationContent = selectObj.name
+            this.productform.shop = selectObj
             this.pickedData = selectObj
         },
         loadPickData(url){
@@ -532,6 +593,26 @@ export default {
             this.detailDialogVisible = false
             this.isEdit = false
             this.detailText = ''
+        },
+
+        handlePercentChange(val){
+            let num = val
+            if(val > 100){
+                num = 100
+            }
+            if(val < 1){
+                num = 1
+            }
+            this.$nextTick(() => {
+                this.productform.distributionAwardPercent = num
+            })
+        },
+
+        handleUploadPosterUrl(res){
+            this.productform.posterUrl = 'http://cdn.genwoshua.com/' + res.key
+        },
+        handleUploadRemovePosterUrl(res){
+            this.productform.posterUrl = ''
         },
 
         handleUpdataShop(){
@@ -627,6 +708,9 @@ export default {
                     margin-right: 20px;
                 }
             }
+        }
+        .el-date-editor .el-range-separator{
+            padding: 0;
         }
     }
 

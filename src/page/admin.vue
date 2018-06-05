@@ -40,12 +40,12 @@
                             <span slot="title">首页推荐</span>
                         </el-menu-item>
 
-                        <el-menu-item index="6">
+                        <el-menu-item index="/admin/orders">
                             <i class="el-icon-tickets"></i>
                             <span slot="title">订单管理</span>
                         </el-menu-item>
 
-                        <el-menu-item index="7">
+                        <el-menu-item index="/admin/use-log">
                             <i class="el-icon-news"></i>
                             <span slot="title">核销记录</span>
                         </el-menu-item>
@@ -78,15 +78,13 @@ export default {
 
     },
     watch: {
-        
+        '$route' (to, from) {
+            this.menuActive = to.path
+        }
     },
     created(){
         //active
-        if(sessionStorage.menuActive){
-            this.menuActive = sessionStorage.menuActive 
-        }else{
-            this.menuActive = this.$router.history.current.path
-        }
+        this.menuActive = this.$router.history.current.path
 
         //scan
         if(sessionStorage.user){
@@ -104,7 +102,6 @@ export default {
         },
         handleSelect(key, keyPath){
             this.menuActive = key
-            sessionStorage.menuActive = key
         },
         handleLogout(){
             request.get(this, '/logout').then((res) => {
